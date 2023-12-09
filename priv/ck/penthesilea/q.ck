@@ -1,0 +1,34 @@
+[
+  [78200.0, 0.0, 0.0],
+  [476900.0, 0.0, 0.04201680672268908],
+  [11000.0, 0.04201680672268908, 0.032679738562091505],
+  [234100.0, 0.032679738562091505, 0.0392156862745098],
+  [71400.0, 0.0392156862745098, 0.007352941176470588],
+] @=> float fades[][];
+
+Gain g => dac;
+0.0 => g.gain;
+
+SinOsc s => Pan2 p => g;
+0.26 => p.pan;
+1700.0 => s.freq;
+
+for (0 => int i; i < fades.size(); i++) {
+fades[i][0] => float totalMs;
+fades[i][1] => float startGain;
+fades[i][2] => float stopGain;
+
+totalMs::ms + now => time stopTime;
+
+0 => float progress;
+
+(stopGain - startGain) * (1 / totalMs) => float stepChange;
+
+while ( now < stopTime ) {
+  1 +=> progress;
+  stepChange + g.gain() => g.gain;
+  1::ms => now;
+}
+}
+
+s =< g;
