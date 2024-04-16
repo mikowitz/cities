@@ -1,1 +1,3 @@
-elixir 1.14.4
+elixir 1.16.2
+rust nightly
+python 3.12.3

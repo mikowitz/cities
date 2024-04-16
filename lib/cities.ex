@@ -1,4 +1,15 @@
 defmodule Cities do
+  @all_cities File.read!("priv/cities.txt") |> String.split("\n", trim: true)
+
+  def all_cities, do: @all_cities
+
+  def alphabet_starting_on(?a), do: Enum.to_list(?a..?z)
+
+  def alphabet_starting_on(char) do
+    ?a..?z
+    |> Enum.slide(0..(char - ?a - 1), 26)
+  end
+
   def read_city(name) do
     File.read!("priv/calvino/#{name}.txt")
     |> String.trim()
@@ -15,7 +26,7 @@ defmodule Cities do
     |> read_city()
     |> to_charlist()
     |> Enum.chunk_by(&(&1 != ?\s))
-    |> Enum.reject(&(&1 == ' '))
+    |> Enum.reject(&(&1 == ~c" "))
     |> Enum.map(fn word ->
       l = length(word)
 
@@ -44,9 +55,15 @@ defmodule Cities do
 
   def map_letter(name, letter) do
     prime_limit =
-      case factors_for(letter - ?`) do
-        [] -> 2
-        factors -> Enum.max(factors)
+      case letter in to_charlist(name) do
+        true ->
+          1
+
+        false ->
+          case factors_for(letter - ?`) do
+            [] -> 2
+            factors -> Enum.max(factors)
+          end
       end
 
     parsed = parse_city_with_word_position(name)
@@ -60,10 +77,11 @@ defmodule Cities do
     end)
     |> Enum.reverse()
     |> then(&[{[letter], 0, 0} | &1])
-    |> Enum.chunk_every(2, 1, :discard)
-    |> Enum.map(fn [{_, start_time, start_gain}, {_, stop_delta, stop_gain}] ->
-      [stop_delta * 100.0, start_gain / prime_limit, stop_gain / prime_limit]
-    end)
+
+    # |> Enum.chunk_every(2, 1, :discard)
+    # |> Enum.map(fn [{_, start_time, start_gain}, {_, stop_delta, stop_gain}] ->
+    #   [stop_delta * 100.0, start_gain / (2 * prime_limit), stop_gain / (2 * prime_limit)]
+    # end)
   end
 
   defp chuck_body(freq) do
