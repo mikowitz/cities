@@ -1,0 +1,12 @@
+memory      diomira,isidora,zaira,zora,maurilia
+desire      dorothea,anastasia,despina,fedora,zobeide
+signs       tamara,zirma,zoe,hypatia,olivia
+thin        isaura,zenobia,armilla,sophronia,octavia
+trading     euphemia,chloe,eutropia,ersilia,esmeralda
+eyes        valdrada,zemrude,baucis,phyllis,moriana
+names       aglaura,leandra,pyrrha,clarice,irene
+thedead     melania,adelma,eusapia,argia,laudomia
+thesky      eudoxia,beersheba,thekla,perinthia,andria
+continuous  leonia,trude,procopia,cecilia,penthesilea
+hidden      olinda,raissa,marozia,theodora,berenice
+

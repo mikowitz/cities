@@ -1,21 +1,13 @@
 # Cities
 
-**TODO: Add description**
+## Workflow
 
-## Installation
+### Segmenting
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `cities` to your list of dependencies in `mix.exs`:
+* Overlay timelines of city name (in morse/Messaien) and set name
 
-```elixir
-def deps do
-  [
-    {:cities, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/cities>.
+### Letter dynamic envelopes
+* Extract city + letter graphs (linear, cubic, average of the 2)
+* Normalize them all from `[min, max]` to `[0, 1/(length of city)]`
+    (this is so that at worst, the highest volume of the piece is 1)
 

@@ -3,6 +3,20 @@ defmodule Cities do
 
   def all_cities, do: @all_cities
 
+  def all_sets do
+    File.read!("priv/sets.txt")
+    |> String.split("\n", trim: true)
+    |> Enum.map(fn line ->
+      [set, cities] = String.split(line, " ", trim: true)
+      {set, String.split(cities, ",", trim: true)}
+    end)
+  end
+
+  def set_for(city) do
+    {k, _} = Enum.find(all_sets(), fn {_, v} -> city in v end)
+    k
+  end
+
   def alphabet_starting_on(?a), do: Enum.to_list(?a..?z)
 
   def alphabet_starting_on(char) do
@@ -11,7 +25,7 @@ defmodule Cities do
   end
 
   def read_city(name) do
-    File.read!("priv/calvino/#{name}.txt")
+    File.read!("./priv/calvino/#{name}.txt")
     |> String.trim()
     |> String.downcase()
     |> then(fn s ->

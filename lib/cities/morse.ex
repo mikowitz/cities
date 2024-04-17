@@ -35,7 +35,7 @@ defmodule Cities.Morse do
     |> Enum.map(&@char_to_morse[&1])
   end
 
-  def to_timespans(word) do
+  def to_timespans(word, total \\ 1000) do
     word
     |> to_morse()
     |> Enum.map(&morse_to_count/1)
@@ -44,7 +44,7 @@ defmodule Cities.Morse do
       sum = Enum.sum(l)
 
       [0 | Enum.scan(l, &(&1 + &2))]
-      |> Enum.map(&round(&1 * 1000 / sum))
+      |> Enum.map(&round(&1 * total / sum))
     end)
   end
 

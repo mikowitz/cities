@@ -10,14 +10,22 @@ defmodule Cities.Envelope do
         List.insert_at(l, -1, Enum.at(l, 0))
       end)
 
+    {xs, ys}
+
     Enum.zip(xs, ys)
     |> Enum.map(&Tuple.to_list/1)
     |> List.flatten()
     |> then(fn points ->
-      Cities.Python.call_python(
-        :spline,
-        :calculate_spline,
-        [city, total_length, points]
+      python = System.find_executable("python3")
+
+      Port.open(
+        {:spawn_executable, python},
+        args: [
+          "./priv/python/spline.py",
+          "calculate_spline",
+          city,
+          "#{total_length}" | Enum.map(points, &to_string/1)
+        ]
       )
     end)
   end

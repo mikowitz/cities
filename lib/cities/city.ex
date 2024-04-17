@@ -8,6 +8,10 @@ defmodule Cities.City do
     |> Enum.sum()
   end
 
+  def build_letter_envelopes(city) do
+    for c <- to_charlist(city), do: build_letter_envelope(city, c)
+  end
+
   def build_letter_envelope(city, letter) do
     [{c, _, _} = start | rest] = chars = parse_city_with_word_position(city)
 
@@ -33,14 +37,19 @@ defmodule Cities.City do
     xs = Enum.scan(xs, &(&1 + &2)) |> List.insert_at(0, 0)
     ys = List.insert_at(ys, -1, Enum.at(ys, -1))
 
+    File.mkdir_p("priv/text/letter-dynamic-envelope/#{city}/linear")
+    File.mkdir_p("priv/text/letter-dynamic-envelope/#{city}/cubic")
+    File.mkdir_p("priv/text/letter-dynamic-envelope/#{city}/average")
+    File.mkdir_p("priv/images/letter-dynamic-envelope/#{city}")
+
     Enum.zip(xs, ys)
     |> Enum.map(&Tuple.to_list/1)
     |> List.flatten()
     |> then(fn points ->
       Cities.Python.call_python(
-        :spline,
-        :calculate_letter_spline,
-        [city, to_string([letter]), points]
+        "./priv/python/spline.py",
+        "calculate_letter_spline",
+        [city, [letter] | points]
       )
     end)
   end

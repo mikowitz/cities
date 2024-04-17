@@ -24,7 +24,8 @@ defmodule Cities.MixProject do
       # {:xairo, github: "mikowitz/xairo"},
       {:messiaen, "~> 0.1.0", github: "mikowitz/messiaen"},
       # {:dep_from_hexpm, "~> 0.3.0"},
-      {:erlport, "~> 0.9"}
+      {:erlport, "~> 0.9"},
+      {:satie, github: "mikowitz/satie"}
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
   end
