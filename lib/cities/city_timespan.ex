@@ -52,14 +52,28 @@ defmodule Cities.CityTimespan do
   end
 
   def for(city) do
-    city_name = city
     set = Cities.set_for(city)
 
     find_overlap(city, set)
+    |> save_timespans(city)
+  end
+
+  def build_envelope(city) do
+    set = Cities.set_for(city)
+
+    indices =
+      find_overlap(city, set)
+      |> Enum.map(fn {{_, a}, {_, b}} -> [a, b] end)
+      |> List.flatten()
+
+    Cities.Python.call_python(
+      "./priv/python/spline.py",
+      "city_set_envelope",
+      [city | indices]
+    )
   end
 
   def find_overlap(city, set) do
-    city_name = city
     total = Cities.City.total(city)
 
     city =
@@ -87,6 +101,10 @@ defmodule Cities.CityTimespan do
     |> Enum.filter(fn [{x, _} | _] -> x end)
     |> Enum.map(&{List.first(&1), List.last(&1)})
     |> List.update_at(0, fn {{x, _}, y} -> {{x, 0}, y} end)
+  end
+
+  def save_timespans(timespans, city_name) do
+    timespans
     |> Enum.map(fn {{_, x}, {_, y}} -> Timespan.new(x, y) end)
     |> TimespanList.new()
     |> Satie.Lilypond.LilypondFile.from()

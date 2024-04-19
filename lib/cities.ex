@@ -68,17 +68,17 @@ defmodule Cities do
   end
 
   def map_letter(name, letter) do
-    prime_limit =
-      case letter in to_charlist(name) do
-        true ->
-          1
-
-        false ->
-          case factors_for(letter - ?`) do
-            [] -> 2
-            factors -> Enum.max(factors)
-          end
-      end
+    # prime_limit =
+    #   case letter in to_charlist(name) do
+    #     true ->
+    #       1
+    #
+    #     false ->
+    #       case factors_for(letter - ?`) do
+    #         [] -> 2
+    #         factors -> Enum.max(factors)
+    #       end
+    #   end
 
     parsed = parse_city_with_word_position(name)
 

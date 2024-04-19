@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import interpolate
 
-types = ["average", "cubic", "linear"]
+types = ["average"] #$, "cubic", "linear"]
 
 for city_type in types:
     for letter_type in types:
@@ -27,10 +27,6 @@ for city_type in types:
 
 
         plt.figure()
-# plt.plot(x, np.array(norm_city), color='red')
-# plt.plot(x, np.array(norm_char), color='blue')
         plt.plot(x, y, color='purple')
-# plt.plot(x, np.array(city), color='red')
-# plt.plot(x, np.array(letter), color='blue')
-        # plt.show()
-        plt.savefig(f"diomira-city-{city_type}-char-{letter_type}.png")
+        plt.show()
+        # plt.savefig(f"diomira-city-{city_type}-char-{letter_type}.png")
