@@ -61,15 +61,31 @@ defmodule Cities.CityTimespan do
   def build_envelope(city) do
     set = Cities.set_for(city)
 
+    xs = Messiaen.lengths(city) |> Enum.scan(&(&1 + &2)) |> List.insert_at(0, 0)
+
+    ys =
+      to_charlist(city)
+      |> Enum.map(&(&1 - ?`))
+      |> then(fn l ->
+        List.insert_at(l, -1, Enum.at(l, 0))
+      end)
+
+    city_dynamic_envelope =
+      Enum.zip(xs, ys)
+      |> Enum.map(&Tuple.to_list/1)
+      |> List.flatten()
+
     indices =
       find_overlap(city, set)
       |> Enum.map(fn {{_, a}, {_, b}} -> [a, b] end)
       |> List.flatten()
 
+    # {city_dynamic_envelope, indices}
+
     Cities.Python.call_python(
       "./priv/python/spline.py",
       "city_set_envelope",
-      [city | indices]
+      [city, length(indices) | indices] ++ city_dynamic_envelope
     )
   end
 

@@ -115,38 +115,94 @@ def city_set_envelope(*args):
     from itertools import batched
     import os
 
-    print(args)
     args = args[0]
     city_name = args[0]
-    print(city_name)
-    points = list(map(int, args[1:]))
+    indices_length = int(args[1])
+    indices = args[2:2+indices_length]
+    city_env = list(map(int, args[2+indices_length:]))
+
+    city_env[-1] = 0
+    city_env = list(batched(city_env, 2))
+    # city_env[-1][1] = 0
+
+    points = list(map(int, indices))
+
     pairs = [points[i:i+2] for i in range(len(points) - 1)]
-    print(pairs)
 
     env = []
+    cubic_env = []
+
+    def norm(min, max, tmin=0, tmax=1):
+        return interpolate.interp1d([min, max], [tmin, tmax])
 
     for i, a in enumerate(pairs):
         if i % 2 == 0:
-            num = 1
+            x, y = list(zip(*city_env))
+            l = a[1] - a[0]
+            if l == 0:
+                continue
+            xl = np.linspace(0, city_env[-1][0], num=l)
+            yl = np.interp(xl, x, y)
+            env += list(norm(min(yl), max(yl), tmin=0.1)(yl))
+
+            cubic = cubic_interpolation(x, y)(xl)
+
+            cubic_env += list(norm(min(cubic), max(cubic), tmin=0.1)(cubic))
         else:
             num = 0.1
-        env += ([num] * (a[1] - a[0]))
+            env += ([num] * (a[1] - a[0]))
+            cubic_env += ([num] * (a[1] - a[0]))
 
     x = np.linspace(0, len(env), len(env))
     y = np.array(env)
+
+    avg = (y + np.array(cubic_env)) / 2
+
     plt.figure()
     plt.plot(x, y, color='blue')
-    plt.show()
+    plt.plot(x, avg, color='purple')
+    plt.plot(x, np.array(cubic_env), color='red')
+    # plt.title(city_env)
+    # plt.show()
     # plt.plot(data[:,0], data[:,1], 'ob')
     # plt.plot(xl, yl, color='blue')
     # plt.plot(xl, f3(xl), color='red')
     # plt.plot(xl, avg, color='purple')
-    # plt.savefig(f"priv/images/letter-dynamic-envelope/{city_name}/{letter}.png")
+    plt.savefig(f"priv/images/city-set-envelope/{city_name}.png")
+    with open(f"priv/text/city-set-envelope/average/{city_name}.txt", 'w') as f:
+        for i in avg:
+            f.write(str(round(i, 3)))
+            f.write("\n")
 
+    with open(f"priv/text/city-set-envelope/linear/{city_name}.txt", 'w') as f:
+        for i in y:
+            f.write(str(round(i, 3)))
+            f.write("\n")
+
+
+def final_city_dynamic_envelope(*args):
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    args = args[0]
+    city_name = args[0]
+    points = list(map(float, args[1:]))
+
+    x = np.linspace(0, len(points)-1, num=len(points))
+    y = np.array(points)
+
+    with open(f"priv/text/final-city-dynamic-envelope/{city_name}.txt", 'w') as f:
+        for i in points:
+            f.write(str(round(i, 3)))
+            f.write("\n")
+
+    plt.figure()
+    plt.plot(x, y, color='blue')
+    plt.savefig(f"priv/images/final-city-dynamic-envelope/{city_name}.png")
 
 if __name__ == "__main__":
     import sys
-    print(sys.argv)
+
     eval(sys.argv[1])(sys.argv[2:])
 
 
