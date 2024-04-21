@@ -31,26 +31,26 @@ defmodule Cities.Envelope do
   end
 
   def city_final_dynamic_envelope(city) do
-    city_env =
-      File.read!("priv/text/city-dynamic-envelope/average/#{city}.txt")
-      |> String.split("\n", trim: true)
-      |> Enum.map(&Float.parse/1)
-      |> Enum.map(&elem(&1, 0))
-
-    city_set_env =
-      File.read!("priv/text/city-set-envelope/average/#{city}.txt")
-      |> String.split("\n", trim: true)
-      |> Enum.map(&Float.parse/1)
-      |> Enum.map(&elem(&1, 0))
-
-    points =
-      Enum.zip(city_env, city_set_env)
-      |> Enum.map(fn {a, b} -> Float.round(a * b, 3) end)
+    # city_env =
+    #   File.read!("priv/text/city-dynamic-envelope/average/#{city}.txt")
+    #   |> String.split("\n", trim: true)
+    #   |> Enum.map(&Float.parse/1)
+    #   |> Enum.map(&elem(&1, 0))
+    #
+    # city_set_env =
+    #   File.read!("priv/text/city-set-envelope/average/#{city}.txt")
+    #   |> String.split("\n", trim: true)
+    #   |> Enum.map(&Float.parse/1)
+    #   |> Enum.map(&elem(&1, 0))
+    #
+    # points =
+    #   Enum.zip(city_env, city_set_env)
+    #   |> Enum.map(fn {a, b} -> Float.round(a * b, 3) end)
 
     Cities.Python.call_python(
       "./priv/python/spline.py",
-      "final_city_dynamic_envelope",
-      [city | points]
+      "better_final_city_dynamic_envelope",
+      [city]
     )
   end
 end

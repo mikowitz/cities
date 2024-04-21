@@ -200,6 +200,31 @@ def final_city_dynamic_envelope(*args):
     plt.plot(x, y, color='blue')
     plt.savefig(f"priv/images/final-city-dynamic-envelope/{city_name}.png")
 
+def better_final_city_dynamic_envelope(*args):
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    city_name = args[0][0]
+    with open(f"priv/text/city-dynamic-envelope/average/{city_name}.txt", 'r') as f:
+        city = list(map(float, f.readlines()))
+
+    with open(f"priv/text/city-set-envelope/average/{city_name}.txt", 'r') as f:
+        city_set = list(map(float, f.readlines()))
+
+    points = list(map(lambda a: round(a[0] * a[1], 3), list(zip(city, city_set))))
+
+    x = np.linspace(0, len(points)-1, num=len(points))
+    y = np.array(points)
+
+    with open(f"priv/text/better-final-city-dynamic-envelope/{city_name}.txt", 'w') as f:
+        for i in points:
+            f.write(str(round(i, 3)))
+            f.write("\n")
+
+    plt.figure()
+    plt.plot(x, y, color='blue')
+    plt.savefig(f"priv/images/better-final-city-dynamic-envelope/{city_name}.png")
+
 if __name__ == "__main__":
     import sys
 
