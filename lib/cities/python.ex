@@ -11,9 +11,9 @@ defmodule Cities.Python do
     Port.close(port)
   end
 
-  def arg_to_string(l) when is_list(l) do
-    Enum.map(l, &to_string/1)
-  end
+  # def arg_to_string(l) when is_list(l) do
+  #   Enum.map(l, &to_string/1)
+  # end
 
   def arg_to_string(x), do: to_string(x)
 end

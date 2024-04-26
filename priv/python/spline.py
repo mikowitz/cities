@@ -101,6 +101,15 @@ def calculate_letter_spline(*args):
             f.write(str(round(y, 3)))
             f.write("\n")
 
+    with open(f"priv/text/letter-dynamic-envelope/{city_name}/average/max/{letter}.txt", 'w') as f:
+        i = 1
+        for y in avg[:length+1]:
+            f.write(f"{i}, " + str(round(y, 3)) + ";")
+            i += 1
+            f.write("\n")
+
+        f.write(f"{i}, 99999;\n")
+
     plt.figure()
     plt.plot(data[:,0], data[:,1], 'ob')
     plt.plot(xl, yl, color='blue')
@@ -149,6 +158,7 @@ def city_set_envelope(*args):
 
             cubic_env += list(norm(min(cubic), max(cubic), tmin=0.1)(cubic))
         else:
+            # TODO: make `num` even smaller
             num = 0.1
             env += ([num] * (a[1] - a[0]))
             cubic_env += ([num] * (a[1] - a[0]))

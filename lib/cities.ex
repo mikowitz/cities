@@ -1,6 +1,10 @@
 defmodule Cities do
   @all_cities File.read!("priv/cities.txt") |> String.split("\n", trim: true)
 
+  def for_all_cities(func) do
+    for city <- all_cities(), do: func.(city)
+  end
+
   def all_cities, do: @all_cities
 
   def all_sets do
@@ -10,6 +14,7 @@ defmodule Cities do
       [set, cities] = String.split(line, " ", trim: true)
       {set, String.split(cities, ",", trim: true)}
     end)
+    |> Enum.into(%{})
   end
 
   def set_for(city) do

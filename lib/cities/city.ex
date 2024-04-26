@@ -39,7 +39,7 @@ defmodule Cities.City do
 
     File.mkdir_p("priv/text/letter-dynamic-envelope/#{city}/linear")
     File.mkdir_p("priv/text/letter-dynamic-envelope/#{city}/cubic")
-    File.mkdir_p("priv/text/letter-dynamic-envelope/#{city}/average")
+    File.mkdir_p("priv/text/letter-dynamic-envelope/#{city}/average/max")
     File.mkdir_p("priv/images/letter-dynamic-envelope/#{city}")
 
     Enum.zip(xs, ys)
